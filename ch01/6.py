@@ -5,24 +5,20 @@ def generate_ngrams(sentence, n, type="tango"):
     # n-gram生成
     ngrams = []
     if type == "tango":
+        # 単語bigramの場合はリストに変換
         if isinstance(sentence, str):
-            # 文字列の場合は空白を削除してリストに変換
-            sentence_list = sentence.strip().split()
-        elif isinstance(sentence, list):
-            # リストの場合は空白を削除
-            sentence_list = [word.strip() for word in sentence]
-
-        for i in range(len(sentence_list) - n + 1):
-            ngrams.append(tuple(sentence_list[i : i + n]))
+            sentence = sentence.split()
+        elif not isinstance(sentence, list):
+            return
     if type == "moji":
-        if isinstance(sentence, str):
-            # 文字列の場合は空白を削除してリストに変換
-            sentence = sentence.strip().replace(" ", "")
-        elif isinstance(sentence, list):
-            sentence = "".join(sentence).strip()
+        # 文字bigramの場合はstrに変換
+        if isinstance(sentence, list):
+            sentence = " ".join(sentence)
+        elif not isinstance(sentence, str):
+            return
 
-        for i in range(len(sentence) - n + 1):
-            ngrams.append(tuple(sentence[i : i + n]))
+    for i in range(len(sentence) - n + 1):
+        ngrams.append(tuple(sentence[i : i + n]))
 
     return ngrams
 
@@ -31,7 +27,9 @@ sentence1 = "paraparaparadise"
 sentence2 = "paragraph"
 
 x = set(generate_ngrams(sentence1, 2, "moji"))
+print(x)
 y = set(generate_ngrams(sentence2, 2, "moji"))
+print(y)
 # 和集合
 print(x | y)
 # 積集合
